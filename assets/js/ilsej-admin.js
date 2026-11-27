@@ -234,4 +234,16 @@
 			$fileInput.val('');
 		});
 	});
+
+	// Show the irreversible-deletion warning while "Delete data on uninstall" is ticked.
+	$(function () {
+		const $checkbox = $('#ilsej-delete-data-on-uninstall');
+		const $warning = $('#ilsej-delete-warning');
+		if (!$checkbox.length || !$warning.length) { return; }
+		const syncWarning = function () {
+			$warning.prop('hidden', !$checkbox.is(':checked'));
+		};
+		syncWarning();
+		$checkbox.on('change', syncWarning);
+	});
 })(jQuery);

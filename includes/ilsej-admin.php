@@ -990,25 +990,13 @@ class ILSEJ_Admin {
 		$settings = ILSEJ_Core::get_settings();
 		$enabled  = ! empty( $settings['delete_data_on_uninstall'] );
 		printf(
-			'<label><input type="checkbox" name="%1$s[delete_data_on_uninstall]" value="1" %2$s /> %3$s</label>',
+			'<label><input type="checkbox" id="ilsej-delete-data-on-uninstall" name="%1$s[delete_data_on_uninstall]" value="1" %2$s /> %3$s</label>',
 			esc_attr( ILSEJ_Core::OPTION_KEY ),
 			checked( $enabled, true, false ),
 			esc_html__( 'Remove all plugin settings, transients, and cron jobs when the plugin is deleted.', 'webgeeksmedia-ai-semantic-internal-links' )
 		);
 		echo '<p class="description">' . esc_html__( 'Leave unchecked if you plan to reinstall the plugin later. Your Pinecone index is not affected.', 'webgeeksmedia-ai-semantic-internal-links' ) . '</p>';
-		echo '<p id="ilsej-delete-warning" class="description" style="color: #d63638; font-weight: 600; display: none;">' . esc_html__( 'Warning: this is irreversible. All the data will be permanently deleted.', 'webgeeksmedia-ai-semantic-internal-links' ) . '</p>';
-		?>
-		<script>
-		(function() {
-			var c = document.querySelector('input[name="<?php echo esc_js( ILSEJ_Core::OPTION_KEY ); ?>[delete_data_on_uninstall]"]');
-			var w = document.getElementById('ilsej-delete-warning');
-			if (!c || !w) return;
-			function t() { w.style.display = c.checked ? '' : 'none'; }
-			t();
-			c.addEventListener('change', t);
-		})();
-		</script>
-		<?php
+		echo '<p id="ilsej-delete-warning" class="description" style="color: #d63638; font-weight: 600;" hidden>' . esc_html__( 'Warning: this is irreversible. All the data will be permanently deleted.', 'webgeeksmedia-ai-semantic-internal-links' ) . '</p>';
 	}
 
 	/**

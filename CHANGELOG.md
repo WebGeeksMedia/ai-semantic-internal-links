@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-11-28
+
+### Changed
+- The "Delete data on uninstall" warning toggle now lives in the enqueued
+  admin script instead of an inline script tag.
+- Admin notices about key decryption and OpenSSL show to administrators only.
+- The readme states when vectors are deleted from Pinecone and lists the key
+  checks made when credentials are saved.
+
+### Fixed
+- The key decryption notice linked to the wrong settings URL.
+
+### Removed
+- The one-time routine that edited the active plugins list to clear an old
+  plugin folder name.
+
 ## [1.1.0] - 2026-11-27
 
 ### Changed

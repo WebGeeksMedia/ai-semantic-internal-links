@@ -4,7 +4,7 @@
  * Description: Suggests contextually relevant internal links in the editor using semantic vector search. Built with Google Vertex AI embeddings, Pinecone vector database, and Claude or OpenAI entity extraction.
  * Author: WebGeeksMedia
  * Author URI: https://webgeeksmedia.com/
- * Version: 1.1.0
+ * Version: 1.1.1
  * Text Domain: webgeeksmedia-ai-semantic-internal-links
  * Requires at least: 6.0
  * Requires PHP: 8.2
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * for asset loading, versioning, and file system operations.
  */
 if ( ! defined( 'ILSEJ_VERSION' ) ) {
-	define( 'ILSEJ_VERSION', '1.1.0' );
+	define( 'ILSEJ_VERSION', '1.1.1' );
 }
 if ( ! defined( 'ILSEJ_DIR' ) ) {
 	define( 'ILSEJ_DIR', plugin_dir_path( __FILE__ ) ); // Absolute server path to plugin directory.
@@ -152,33 +152,6 @@ function ilsej_migrate_to_v2() {
 	error_log( 'ILSEJ: Successfully migrated to v2.0 (encrypted API keys, added new defaults).' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 }
 register_activation_hook( __FILE__, 'ilsej_migrate_to_v2' );
-
-/**
- * Remove stale active_plugins entry from the old plugin slug.
- *
- * Earlier builds used the folder internal-linking-sej (the original plugin's slug), and
- * WordPress may retain that path in the active_plugins option. This runs once
- * on plugins_loaded (not activation) so it works regardless of how the plugin was
- * deployed (manual activation, FTP upload, server-side rename, deployment script).
- *
- * @return void
- */
-function ilsej_cleanup_old_slug() {
-	if ( get_option( 'ilsej_old_slug_cleaned' ) ) {
-		return;
-	}
-
-	$old_plugin = 'internal-linking-sej/internal-linking-sej.php';
-	$active     = get_option( 'active_plugins', [] );
-	$key        = array_search( $old_plugin, $active, true );
-	if ( false !== $key ) {
-		unset( $active[ $key ] );
-		update_option( 'active_plugins', array_values( $active ) );
-	}
-
-	update_option( 'ilsej_old_slug_cleaned', true );
-}
-add_action( 'plugins_loaded', 'ilsej_cleanup_old_slug' );
 
 /**
  * Clean up cron events on plugin deactivation.

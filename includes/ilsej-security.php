@@ -71,6 +71,9 @@ class ILSEJ_Security {
 			add_action(
 				'admin_notices',
 				static function () {
+					if ( ! current_user_can( 'manage_options' ) ) {
+						return;
+					}
 					echo '<div class="notice notice-error"><p><strong>AI Semantic Internal Links:</strong> OpenSSL is not available. API keys are stored unencrypted. Contact your host to enable the OpenSSL PHP extension.</p></div>';
 				}
 			);

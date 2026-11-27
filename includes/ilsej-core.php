@@ -256,7 +256,10 @@ class ILSEJ_Core {
 			add_action(
 				'admin_notices',
 				static function () {
-					echo '<div class="notice notice-warning"><p><strong>AI Semantic Internal Links:</strong> API key decryption failed (site salts may have changed). Please re-save your settings on the <a href="' . esc_url( admin_url( 'options-general.php?page=ilsej-settings' ) ) . '">Settings page</a>.</p></div>';
+					if ( ! current_user_can( 'manage_options' ) ) {
+						return;
+					}
+					echo '<div class="notice notice-warning"><p><strong>AI Semantic Internal Links:</strong> API key decryption failed (site salts may have changed). Please re-save your settings on the <a href="' . esc_url( admin_url( 'admin.php?page=ilsej-settings' ) ) . '">Settings page</a>.</p></div>';
 				}
 			);
 		}

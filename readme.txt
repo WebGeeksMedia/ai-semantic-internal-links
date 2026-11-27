@@ -4,7 +4,7 @@ Tags: internal linking, semantic search, related posts, vector search, ai
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,7 +58,7 @@ This plugin connects to the four third-party services below. It sends nothing to
 
 Used to turn text into vector embeddings.
 
-* **What is sent:** when a post is indexed, its title and a short extract (the SEO meta description if Yoast SEO is active, the excerpt, the first paragraph, each H2 heading with the paragraph after it, and the last sentence); short phrases with their surrounding sentence when an editor asks for suggestions; the selected text in anchor mode; and any search text your theme passes to `ilsej_get_embeddings()`. To authenticate, the plugin signs a token request with your service account key and sends it to Google's OAuth endpoint.
+* **What is sent:** when a post is indexed, its title and a short extract (the SEO meta description if Yoast SEO is active, the excerpt, the first paragraph, each H2 heading with the paragraph after it, and the last sentence); short phrases with their surrounding sentence when an editor asks for suggestions; the selected text in anchor mode; and any search text your theme passes to `ilsej_get_embeddings()`. To authenticate, the plugin signs a token request with your service account key and sends it to Google's OAuth endpoint; it also does this once when you save the key, to check it.
 * **When:** on bulk indexing, when a post is published or updated (through WP-Cron), when an editor asks for suggestions, and when your theme calls the embedding or search functions.
 * **Endpoints:** `https://oauth2.googleapis.com/token` and `https://<region>-aiplatform.googleapis.com/`.
 * Google Cloud terms: https://cloud.google.com/terms
@@ -68,7 +68,7 @@ Used to turn text into vector embeddings.
 
 Used to store the vectors and search them.
 
-* **What is sent:** each indexed post's vector, its post ID, and metadata (title, URL, publish date and year, primary category, tags, post type); search vectors and filters when suggestions or related posts are requested; delete requests when a post is unpublished, deleted or leaves an indexed post type. When you save your API key, the plugin checks it against Pinecone's index list.
+* **What is sent:** each indexed post's vector, its post ID, and metadata (title, URL, publish date and year, primary category, tags, post type); search vectors and filters when suggestions or related posts are requested; delete requests when a post is unpublished, deleted or leaves an indexed post type. When you save your API key, the plugin checks it against Pinecone's index list, and the Articles Indexing page reads your index's vector count from its `describe_index_stats` endpoint.
 * **When:** on indexing, on post updates and deletions, when an editor asks for suggestions, and when your theme calls `ilsej_get_related_posts()` (results are cached).
 * **Endpoints:** your index host (`https://<your-index>.svc.<region>.pinecone.io`) and `https://api.pinecone.io/`.
 * Pinecone terms of service: https://www.pinecone.io/legal/
@@ -151,9 +151,20 @@ Yes. The filters `ilsej_generic_anchor_blocklist`, `ilsej_anchor_stop_words` and
 
 = Will my data be deleted if I uninstall the plugin? =
 
-Only if you turn on "Delete data on uninstall" in Settings (off by default). Vectors in Pinecone are never deleted by the plugin; remove them from the Pinecone console.
+Only if you turn on "Delete data on uninstall" in Settings (off by default); that removes the plugin's settings, transients and cron jobs. While the plugin is active, it deletes a post's vector from Pinecone when the post is unpublished, deleted or leaves an indexed post type. Uninstalling never deletes your Pinecone index or the vectors still in it; remove those from the Pinecone console.
 
 == Changelog ==
+
+= 1.1.1 =
+
+* The "Delete data on uninstall" warning toggle now lives in the enqueued
+  admin script instead of an inline script tag.
+* Admin notices about key decryption and OpenSSL show to administrators only.
+* The readme states when vectors are deleted from Pinecone and lists the key
+  checks made when credentials are saved.
+* The key decryption notice linked to the wrong settings URL.
+* The one-time routine that edited the active plugins list to clear an old
+  plugin folder name.
 
 = 1.1.0 =
 
