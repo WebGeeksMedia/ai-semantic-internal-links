@@ -1,5 +1,5 @@
 === AI Semantic Internal Links ===
-Contributors: webgeeksmedia
+Contributors: namaserajesh
 Tags: internal linking, semantic search, related posts, vector search, ai
 Requires at least: 6.0
 Tested up to: 7.1
