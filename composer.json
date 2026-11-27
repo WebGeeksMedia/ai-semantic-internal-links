@@ -1,5 +1,5 @@
 {
-	"name": "webgeeksmedia/ai-semantic-internal-links",
+	"name": "webgeeksmedia/webgeeksmedia-ai-semantic-internal-links",
 	"description": "WordPress plugin that suggests internal links by meaning, using Google Vertex AI embeddings, Pinecone vector search and Claude or OpenAI phrase extraction.",
 	"type": "wordpress-plugin",
 	"license": "GPL-2.0-or-later",

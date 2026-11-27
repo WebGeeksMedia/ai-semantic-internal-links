@@ -1,11 +1,11 @@
 <?php
 /**
- * Plugin Name: AI Semantic Internal Links
+ * Plugin Name: WebGeeksMedia – AI Semantic Internal Links
  * Description: Suggests contextually relevant internal links in the editor using semantic vector search. Built with Google Vertex AI embeddings, Pinecone vector database, and Claude or OpenAI entity extraction.
  * Author: WebGeeksMedia
  * Author URI: https://webgeeksmedia.com/
- * Version: 1.0.0
- * Text Domain: ai-semantic-internal-links
+ * Version: 1.1.0
+ * Text Domain: webgeeksmedia-ai-semantic-internal-links
  * Requires at least: 6.0
  * Requires PHP: 8.2
  * License: GPL-2.0-or-later
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * for asset loading, versioning, and file system operations.
  */
 if ( ! defined( 'ILSEJ_VERSION' ) ) {
-	define( 'ILSEJ_VERSION', '1.0.0' );
+	define( 'ILSEJ_VERSION', '1.1.0' );
 }
 if ( ! defined( 'ILSEJ_DIR' ) ) {
 	define( 'ILSEJ_DIR', plugin_dir_path( __FILE__ ) ); // Absolute server path to plugin directory.

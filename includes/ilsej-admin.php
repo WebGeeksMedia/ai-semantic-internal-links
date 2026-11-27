@@ -110,8 +110,8 @@ class ILSEJ_Admin {
 	public function add_menus() {
 		// Top-level menu item in WordPress admin sidebar.
 		add_menu_page(
-			__( 'Internal Linking', 'ai-semantic-internal-links' ),   // Browser page title.
-			__( 'Internal Linking', 'ai-semantic-internal-links' ),   // Menu label in sidebar.
+			__( 'Internal Linking', 'webgeeksmedia-ai-semantic-internal-links' ),   // Browser page title.
+			__( 'Internal Linking', 'webgeeksmedia-ai-semantic-internal-links' ),   // Menu label in sidebar.
 			'manage_options',                                    // Required user capability (admin only).
 			'ilsej-settings',                                    // Unique menu slug.
 			[ $this, 'render_settings_page' ],                   // Function to render page content.
@@ -123,8 +123,8 @@ class ILSEJ_Admin {
 		// This ensures WordPress highlights the parent menu when on settings page.
 		add_submenu_page(
 			'ilsej-settings',                                    // Parent menu slug.
-			__( 'Settings', 'ai-semantic-internal-links' ),            // Page title.
-			__( 'Settings', 'ai-semantic-internal-links' ),            // Submenu label.
+			__( 'Settings', 'webgeeksmedia-ai-semantic-internal-links' ),            // Page title.
+			__( 'Settings', 'webgeeksmedia-ai-semantic-internal-links' ),            // Submenu label.
 			'manage_options',                                    // Capability check.
 			'ilsej-settings',                                    // Same slug as parent (for highlighting).
 			[ $this, 'render_settings_page' ]                    // Render function.
@@ -133,8 +133,8 @@ class ILSEJ_Admin {
 		// Articles Indexing submenu (batch indexing interface).
 		add_submenu_page(
 			'ilsej-settings',                                    // Parent menu slug.
-			__( 'Articles Indexing', 'ai-semantic-internal-links' ),   // Page title.
-			__( 'Articles Indexing', 'ai-semantic-internal-links' ),   // Submenu label.
+			__( 'Articles Indexing', 'webgeeksmedia-ai-semantic-internal-links' ),   // Page title.
+			__( 'Articles Indexing', 'webgeeksmedia-ai-semantic-internal-links' ),   // Submenu label.
 			'manage_options',                                    // Capability check.
 			'ilsej-indexing',                                   // Unique slug for indexing page.
 			[ $this, 'render_indexing_page' ]                   // Render function.
@@ -185,7 +185,7 @@ class ILSEJ_Admin {
 		// Groups all external API credentials together.
 		add_settings_section(
 			'ilsej_api_section',                                 // Section ID.
-			__( 'API Configuration', 'ai-semantic-internal-links' ),   // Section title.
+			__( 'API Configuration', 'webgeeksmedia-ai-semantic-internal-links' ),   // Section title.
 			'__return_null',                                      // Section description callback.
 			'ilsej-settings'                                      // Page slug where section appears.
 		);
@@ -193,7 +193,7 @@ class ILSEJ_Admin {
 		// Individual settings fields within API Configuration section.
 		add_settings_field(
 			'gcp_json_key',                                       // Field ID.
-			__( 'Google Cloud JSON Key', 'ai-semantic-internal-links' ), // Field label.
+			__( 'Google Cloud JSON Key', 'webgeeksmedia-ai-semantic-internal-links' ), // Field label.
 			[ $this, 'field_json_key' ],                         // Callback to render field HTML.
 			'ilsej-settings',                                     // Page slug.
 			'ilsej_api_section'                                   // Section ID.
@@ -201,7 +201,7 @@ class ILSEJ_Admin {
 
 		add_settings_field(
 			'pinecone_api_key',
-			__( 'Pinecone API Key', 'ai-semantic-internal-links' ),
+			__( 'Pinecone API Key', 'webgeeksmedia-ai-semantic-internal-links' ),
 			[ $this, 'field_text' ],                              // Generic text field renderer.
 			'ilsej-settings',
 			'ilsej_api_section',
@@ -213,7 +213,7 @@ class ILSEJ_Admin {
 
 		add_settings_field(
 			'pinecone_host',
-			__( 'Pinecone Host URL', 'ai-semantic-internal-links' ),
+			__( 'Pinecone Host URL', 'webgeeksmedia-ai-semantic-internal-links' ),
 			[ $this, 'field_text' ],
 			'ilsej-settings',
 			'ilsej_api_section',
@@ -225,46 +225,46 @@ class ILSEJ_Admin {
 
 		add_settings_field(
 			'extraction_primary',
-			__( 'Entity Extraction: Primary', 'ai-semantic-internal-links' ),
+			__( 'Entity Extraction: Primary', 'webgeeksmedia-ai-semantic-internal-links' ),
 			[ $this, 'field_select' ],
 			'ilsej-settings',
 			'ilsej_api_section',
 			[
 				'id'          => 'extraction_primary',
 				'options'     => ILSEJ_Core::EXTRACTION_PROVIDERS,
-				'description' => __( 'The AI provider that picks anchor phrases for Bulk Auto Suggestion.', 'ai-semantic-internal-links' ),
+				'description' => __( 'The AI provider that picks anchor phrases for Bulk Auto Suggestion.', 'webgeeksmedia-ai-semantic-internal-links' ),
 			]
 		);
 
 		add_settings_field(
 			'extraction_fallback',
-			__( 'Entity Extraction: Fallback', 'ai-semantic-internal-links' ),
+			__( 'Entity Extraction: Fallback', 'webgeeksmedia-ai-semantic-internal-links' ),
 			[ $this, 'field_select' ],
 			'ilsej-settings',
 			'ilsej_api_section',
 			[
 				'id'          => 'extraction_fallback',
-				'options'     => array_merge( ILSEJ_Core::EXTRACTION_PROVIDERS, [ 'none' => __( 'None', 'ai-semantic-internal-links' ) ] ),
-				'description' => __( 'Runs when the primary fails: no key, an error, a timeout, a refusal or an unusable answer. The article text is then also sent to this provider. Choose None to send it to the primary only.', 'ai-semantic-internal-links' ),
+				'options'     => array_merge( ILSEJ_Core::EXTRACTION_PROVIDERS, [ 'none' => __( 'None', 'webgeeksmedia-ai-semantic-internal-links' ) ] ),
+				'description' => __( 'Runs when the primary fails: no key, an error, a timeout, a refusal or an unusable answer. The article text is then also sent to this provider. Choose None to send it to the primary only.', 'webgeeksmedia-ai-semantic-internal-links' ),
 			]
 		);
 
 		add_settings_field(
 			'claude_model',
-			__( 'Claude Model', 'ai-semantic-internal-links' ),
+			__( 'Claude Model', 'webgeeksmedia-ai-semantic-internal-links' ),
 			[ $this, 'field_select' ],
 			'ilsej-settings',
 			'ilsej_api_section',
 			[
 				'id'          => 'claude_model',
 				'options'     => ILSEJ_Core::CLAUDE_MODELS,
-				'description' => __( 'Model used when Claude extracts. Opus is the most capable; Sonnet and Haiku cost less per article.', 'ai-semantic-internal-links' ),
+				'description' => __( 'Model used when Claude extracts. Opus is the most capable; Sonnet and Haiku cost less per article.', 'webgeeksmedia-ai-semantic-internal-links' ),
 			]
 		);
 
 		add_settings_field(
 			'anthropic_api_key',
-			__( 'Anthropic API Key', 'ai-semantic-internal-links' ),
+			__( 'Anthropic API Key', 'webgeeksmedia-ai-semantic-internal-links' ),
 			[ $this, 'field_text' ],
 			'ilsej-settings',
 			'ilsej_api_section',
@@ -276,7 +276,7 @@ class ILSEJ_Admin {
 
 		add_settings_field(
 			'openai_api_key',
-			__( 'OpenAI API Key', 'ai-semantic-internal-links' ),
+			__( 'OpenAI API Key', 'webgeeksmedia-ai-semantic-internal-links' ),
 			[ $this, 'field_text' ],
 			'ilsej-settings',
 			'ilsej_api_section',
@@ -290,14 +290,14 @@ class ILSEJ_Admin {
 		// Controls which content types are indexed.
 		add_settings_section(
 			'ilsej_indexing_section',
-			__( 'Indexing Settings', 'ai-semantic-internal-links' ),
+			__( 'Indexing Settings', 'webgeeksmedia-ai-semantic-internal-links' ),
 			'__return_null',
 			'ilsej-settings'
 		);
 
 		add_settings_field(
 			'post_types',
-			__( 'Post Types to Index', 'ai-semantic-internal-links' ),
+			__( 'Post Types to Index', 'webgeeksmedia-ai-semantic-internal-links' ),
 			[ $this, 'field_post_types' ],                       // Custom renderer for checkboxes.
 			'ilsej-settings',
 			'ilsej_indexing_section'
@@ -305,7 +305,7 @@ class ILSEJ_Admin {
 
 		add_settings_field(
 			'indexed_page_ids',
-			__( 'Extra Indexed Page IDs', 'ai-semantic-internal-links' ),
+			__( 'Extra Indexed Page IDs', 'webgeeksmedia-ai-semantic-internal-links' ),
 			[ $this, 'field_indexed_page_ids' ],
 			'ilsej-settings',
 			'ilsej_indexing_section'
@@ -314,14 +314,14 @@ class ILSEJ_Admin {
 		// Advanced Settings Section.
 		add_settings_section(
 			'ilsej_advanced_section',
-			__( 'Advanced Settings', 'ai-semantic-internal-links' ),
+			__( 'Advanced Settings', 'webgeeksmedia-ai-semantic-internal-links' ),
 			'__return_null',
 			'ilsej-settings'
 		);
 
 		add_settings_field(
 			'batch_size',
-			__( 'Batch Size', 'ai-semantic-internal-links' ),
+			__( 'Batch Size', 'webgeeksmedia-ai-semantic-internal-links' ),
 			[ $this, 'field_batch_size' ],
 			'ilsej-settings',
 			'ilsej_advanced_section'
@@ -329,7 +329,7 @@ class ILSEJ_Admin {
 
 		add_settings_field(
 			'enable_retry',
-			__( 'Retry Logic', 'ai-semantic-internal-links' ),
+			__( 'Retry Logic', 'webgeeksmedia-ai-semantic-internal-links' ),
 			[ $this, 'field_enable_retry' ],
 			'ilsej-settings',
 			'ilsej_advanced_section'
@@ -337,7 +337,7 @@ class ILSEJ_Admin {
 
 		add_settings_field(
 			'enable_rate_limiting',
-			__( 'Rate Limiting', 'ai-semantic-internal-links' ),
+			__( 'Rate Limiting', 'webgeeksmedia-ai-semantic-internal-links' ),
 			[ $this, 'field_enable_rate_limiting' ],
 			'ilsej-settings',
 			'ilsej_advanced_section'
@@ -345,7 +345,7 @@ class ILSEJ_Admin {
 
 		add_settings_field(
 			'enable_category_filter',
-			__( 'Category Filter', 'ai-semantic-internal-links' ),
+			__( 'Category Filter', 'webgeeksmedia-ai-semantic-internal-links' ),
 			[ $this, 'field_enable_category_filter' ],
 			'ilsej-settings',
 			'ilsej_advanced_section'
@@ -353,7 +353,7 @@ class ILSEJ_Admin {
 
 		add_settings_field(
 			'enable_tag_filter',
-			__( 'Tag Filter', 'ai-semantic-internal-links' ),
+			__( 'Tag Filter', 'webgeeksmedia-ai-semantic-internal-links' ),
 			[ $this, 'field_enable_tag_filter' ],
 			'ilsej-settings',
 			'ilsej_advanced_section'
@@ -361,7 +361,7 @@ class ILSEJ_Admin {
 
 		add_settings_field(
 			'min_relevance_score',
-			__( 'Minimum Relevance Score', 'ai-semantic-internal-links' ),
+			__( 'Minimum Relevance Score', 'webgeeksmedia-ai-semantic-internal-links' ),
 			[ $this, 'field_min_relevance_score' ],
 			'ilsej-settings',
 			'ilsej_advanced_section'
@@ -369,7 +369,7 @@ class ILSEJ_Admin {
 
 		add_settings_field(
 			'excluded_categories',
-			__( 'Excluded Categories', 'ai-semantic-internal-links' ),
+			__( 'Excluded Categories', 'webgeeksmedia-ai-semantic-internal-links' ),
 			[ $this, 'field_excluded_categories' ],
 			'ilsej-settings',
 			'ilsej_advanced_section'
@@ -377,7 +377,7 @@ class ILSEJ_Admin {
 
 		add_settings_field(
 			'excluded_tags',
-			__( 'Excluded Tags', 'ai-semantic-internal-links' ),
+			__( 'Excluded Tags', 'webgeeksmedia-ai-semantic-internal-links' ),
 			[ $this, 'field_excluded_tags' ],
 			'ilsej-settings',
 			'ilsej_advanced_section'
@@ -385,7 +385,7 @@ class ILSEJ_Admin {
 
 		add_settings_field(
 			'delete_data_on_uninstall',
-			__( 'Delete Data on Uninstall', 'ai-semantic-internal-links' ),
+			__( 'Delete Data on Uninstall', 'webgeeksmedia-ai-semantic-internal-links' ),
 			[ $this, 'field_delete_data_on_uninstall' ],
 			'ilsej-settings',
 			'ilsej_advanced_section'
@@ -454,7 +454,7 @@ class ILSEJ_Admin {
 
 		$raw_host = isset( $input['pinecone_host'] ) ? sanitize_text_field( $input['pinecone_host'] ) : '';
 		if ( '' !== $raw_host && ! preg_match( '/^(https:\/\/)?[a-z0-9-]+(\.[a-z0-9-]+)*\.pinecone\.io\/?$/i', $raw_host ) ) {
-			$errors['pinecone_host'] = __( 'Pinecone host must be a valid *.pinecone.io URL.', 'ai-semantic-internal-links' );
+			$errors['pinecone_host'] = __( 'Pinecone host must be a valid *.pinecone.io URL.', 'webgeeksmedia-ai-semantic-internal-links' );
 			$raw_host                = '';
 		}
 		$output['pinecone_host'] = $raw_host;
@@ -473,7 +473,7 @@ class ILSEJ_Admin {
 					$errors['gcp_json_key'] = $v_res;
 				}
 			} catch ( Exception $e ) {
-				$errors['gcp_json_key'] = __( 'Validation timed out. Key saved — please verify manually.', 'ai-semantic-internal-links' );
+				$errors['gcp_json_key'] = __( 'Validation timed out. Key saved — please verify manually.', 'webgeeksmedia-ai-semantic-internal-links' );
 			}
 		}
 
@@ -490,7 +490,7 @@ class ILSEJ_Admin {
 					}
 				}
 			} catch ( Exception $e ) {
-				$errors['pinecone_api_key'] = __( 'Validation timed out. Key saved — please verify manually.', 'ai-semantic-internal-links' );
+				$errors['pinecone_api_key'] = __( 'Validation timed out. Key saved — please verify manually.', 'webgeeksmedia-ai-semantic-internal-links' );
 			}
 		}
 
@@ -502,7 +502,7 @@ class ILSEJ_Admin {
 					$errors['openai_api_key'] = $v_res;
 				}
 			} catch ( Exception $e ) {
-				$errors['openai_api_key'] = __( 'Validation timed out. Key saved — please verify manually.', 'ai-semantic-internal-links' );
+				$errors['openai_api_key'] = __( 'Validation timed out. Key saved — please verify manually.', 'webgeeksmedia-ai-semantic-internal-links' );
 			}
 		}
 
@@ -514,16 +514,16 @@ class ILSEJ_Admin {
 					$errors['anthropic_api_key'] = $v_res;
 				}
 			} catch ( Exception $e ) {
-				$errors['anthropic_api_key'] = __( 'Validation timed out. Key saved — please verify manually.', 'ai-semantic-internal-links' );
+				$errors['anthropic_api_key'] = __( 'Validation timed out. Key saved — please verify manually.', 'webgeeksmedia-ai-semantic-internal-links' );
 			}
 		}
 
 		if ( ! empty( $errors ) ) {
 			set_transient( 'ilsej_settings_errors', $errors, 60 );
-			add_settings_error( 'ilsej_settings_group', 'ilsej_api_error', __( 'Some API keys could not be validated. Please check the errors below.', 'ai-semantic-internal-links' ), 'error' );
+			add_settings_error( 'ilsej_settings_group', 'ilsej_api_error', __( 'Some API keys could not be validated. Please check the errors below.', 'webgeeksmedia-ai-semantic-internal-links' ), 'error' );
 		} else {
 			delete_transient( 'ilsej_settings_errors' );
-			add_settings_error( 'ilsej_settings_group', 'ilsej_settings_saved', __( 'Settings saved.', 'ai-semantic-internal-links' ), 'updated' );
+			add_settings_error( 'ilsej_settings_group', 'ilsej_settings_saved', __( 'Settings saved.', 'webgeeksmedia-ai-semantic-internal-links' ), 'updated' );
 		}
 
 		// 3. Post Types.
@@ -591,24 +591,24 @@ class ILSEJ_Admin {
 
 		echo '<div class="ilsej-mask-wrapper">';
 		echo '<textarea id="ilsej-gcp-json-key" placeholder="' . esc_attr( $placeholder ) . '" name="' . esc_attr( ILSEJ_Core::OPTION_KEY ) . '[gcp_json_key]" rows="10" cols="50" class="large-text code ilsej-blur">' . esc_textarea( $settings['gcp_json_key'] ) . '</textarea>';
-		echo '<button type="button" class="ilsej-toggle-mask" title="' . esc_attr__( 'Show/Hide', 'ai-semantic-internal-links' ) . '"><span class="dashicons dashicons-visibility"></span></button>';
+		echo '<button type="button" class="ilsej-toggle-mask" title="' . esc_attr__( 'Show/Hide', 'webgeeksmedia-ai-semantic-internal-links' ) . '"><span class="dashicons dashicons-visibility"></span></button>';
 		echo '</div>';
 
 		// Hidden file input and "Load from File" button - reads file client-side via JavaScript.
 		echo '<div style="margin-top: 8px;">';
 		echo '<input type="file" id="ilsej-json-file-input" accept=".json,application/json" style="display: none;" />';
-		echo '<button type="button" id="ilsej-load-json-file" class="button button-secondary"><span class="dashicons dashicons-upload" style="vertical-align: middle; margin-right: 4px;"></span>' . esc_html__( 'Load from JSON Key File', 'ai-semantic-internal-links' ) . '</button>';
+		echo '<button type="button" id="ilsej-load-json-file" class="button button-secondary"><span class="dashicons dashicons-upload" style="vertical-align: middle; margin-right: 4px;"></span>' . esc_html__( 'Load from JSON Key File', 'webgeeksmedia-ai-semantic-internal-links' ) . '</button>';
 		echo '</div>';
 
 		if ( ! empty( $error ) ) {
-			echo '<p style="color: #d63638; font-weight: bold; margin-top: 5px;"><strong>' . esc_html__( 'Configuration Error:', 'ai-semantic-internal-links' ) . '</strong> ' . esc_html( $error ) . '</p>';
+			echo '<p style="color: #d63638; font-weight: bold; margin-top: 5px;"><strong>' . esc_html__( 'Configuration Error:', 'webgeeksmedia-ai-semantic-internal-links' ) . '</strong> ' . esc_html( $error ) . '</p>';
 		}
 
 		echo '<p class="description">' . wp_kses(
 			sprintf(
 				/* translators: %s: link to Google Cloud credentials docs */
-				__( 'Paste the contents of your %s. This is required for generating text embeddings via Vertex AI.', 'ai-semantic-internal-links' ),
-				'<a href="https://developers.google.com/workspace/guides/create-credentials#service-account" target="_blank">' . __( 'Google Cloud service account JSON key', 'ai-semantic-internal-links' ) . '</a>'
+				__( 'Paste the contents of your %s. This is required for generating text embeddings via Vertex AI.', 'webgeeksmedia-ai-semantic-internal-links' ),
+				'<a href="https://developers.google.com/workspace/guides/create-credentials#service-account" target="_blank">' . __( 'Google Cloud service account JSON key', 'webgeeksmedia-ai-semantic-internal-links' ) . '</a>'
 			),
 			[
 				'a' => [
@@ -647,12 +647,12 @@ class ILSEJ_Admin {
 		);
 
 		if ( $is_sensitive ) {
-			echo '<button type="button" class="ilsej-toggle-mask" title="' . esc_attr__( 'Show/Hide', 'ai-semantic-internal-links' ) . '"><span class="dashicons dashicons-visibility"></span></button>';
+			echo '<button type="button" class="ilsej-toggle-mask" title="' . esc_attr__( 'Show/Hide', 'webgeeksmedia-ai-semantic-internal-links' ) . '"><span class="dashicons dashicons-visibility"></span></button>';
 		}
 		echo '</div>';
 
 		if ( ! empty( $error ) ) {
-			echo '<p style="color: #d63638; font-weight: bold; margin-top: 5px;"><strong>' . esc_html__( 'Validation Error:', 'ai-semantic-internal-links' ) . '</strong> ' . esc_html( $error ) . '</p>';
+			echo '<p style="color: #d63638; font-weight: bold; margin-top: 5px;"><strong>' . esc_html__( 'Validation Error:', 'webgeeksmedia-ai-semantic-internal-links' ) . '</strong> ' . esc_html( $error ) . '</p>';
 		}
 
 		if ( isset( $args['description'] ) ) {
@@ -712,12 +712,12 @@ class ILSEJ_Admin {
 		}
 
 		if ( empty( $filtered_post_types ) ) {
-			echo '<p>' . esc_html__( 'No public post types found.', 'ai-semantic-internal-links' ) . '</p>';
+			echo '<p>' . esc_html__( 'No public post types found.', 'webgeeksmedia-ai-semantic-internal-links' ) . '</p>';
 			return;
 		}
 
 		echo '<fieldset>';
-		echo '<p class="description">' . esc_html__( 'Select which post types should be indexed for internal linking suggestions.', 'ai-semantic-internal-links' ) . '</p>';
+		echo '<p class="description">' . esc_html__( 'Select which post types should be indexed for internal linking suggestions.', 'webgeeksmedia-ai-semantic-internal-links' ) . '</p>';
 
 		foreach ( $filtered_post_types as $post_type ) {
 			$is_checked = in_array( $post_type->name, $selected_types, true );
@@ -750,7 +750,7 @@ class ILSEJ_Admin {
 			esc_attr( ILSEJ_Core::OPTION_KEY ),
 			esc_attr( implode( ', ', array_map( 'strval', $ids ) ) )
 		);
-		echo '<p class="description">' . esc_html__( 'Comma-separated page IDs to index in addition to the post types above (e.g. pillar or resource pages). Empty means no extra pages.', 'ai-semantic-internal-links' ) . '</p>';
+		echo '<p class="description">' . esc_html__( 'Comma-separated page IDs to index in addition to the post types above (e.g. pillar or resource pages). Empty means no extra pages.', 'webgeeksmedia-ai-semantic-internal-links' ) . '</p>';
 	}
 
 	/**
@@ -766,7 +766,7 @@ class ILSEJ_Admin {
 			esc_attr( ILSEJ_Core::OPTION_KEY ),
 			esc_attr( (string) $batch_size )
 		);
-		echo '<p class="description">' . esc_html__( 'Posts to process per batch (10-100). Higher values are faster but use more memory. Default: 50.', 'ai-semantic-internal-links' ) . '</p>';
+		echo '<p class="description">' . esc_html__( 'Posts to process per batch (10-100). Higher values are faster but use more memory. Default: 50.', 'webgeeksmedia-ai-semantic-internal-links' ) . '</p>';
 	}
 
 	/**
@@ -781,7 +781,7 @@ class ILSEJ_Admin {
 			'<label><input type="checkbox" name="%1$s[enable_retry]" value="1" %2$s /> %3$s</label>',
 			esc_attr( ILSEJ_Core::OPTION_KEY ),
 			checked( $enabled, true, false ),
-			esc_html__( 'Automatically retry failed API calls with exponential backoff (5 attempts, recommended).', 'ai-semantic-internal-links' )
+			esc_html__( 'Automatically retry failed API calls with exponential backoff (5 attempts, recommended).', 'webgeeksmedia-ai-semantic-internal-links' )
 		);
 	}
 
@@ -797,7 +797,7 @@ class ILSEJ_Admin {
 			'<label><input type="checkbox" name="%1$s[enable_rate_limiting]" value="1" %2$s /> %3$s</label>',
 			esc_attr( ILSEJ_Core::OPTION_KEY ),
 			checked( $enabled, true, false ),
-			esc_html__( 'Throttle API calls to prevent hitting external rate limits (recommended).', 'ai-semantic-internal-links' )
+			esc_html__( 'Throttle API calls to prevent hitting external rate limits (recommended).', 'webgeeksmedia-ai-semantic-internal-links' )
 		);
 	}
 
@@ -813,7 +813,7 @@ class ILSEJ_Admin {
 			'<label><input type="checkbox" name="%1$s[enable_category_filter]" value="1" %2$s /> %3$s</label>',
 			esc_attr( ILSEJ_Core::OPTION_KEY ),
 			checked( $enabled, true, false ),
-			esc_html__( 'Show category filter in the editor sidebar and modals for link suggestions.', 'ai-semantic-internal-links' )
+			esc_html__( 'Show category filter in the editor sidebar and modals for link suggestions.', 'webgeeksmedia-ai-semantic-internal-links' )
 		);
 	}
 
@@ -829,7 +829,7 @@ class ILSEJ_Admin {
 			'<label><input type="checkbox" name="%1$s[enable_tag_filter]" value="1" %2$s /> %3$s</label>',
 			esc_attr( ILSEJ_Core::OPTION_KEY ),
 			checked( $enabled, true, false ),
-			esc_html__( 'Show tag filter in the editor sidebar and modals for link suggestions (requires re-indexing).', 'ai-semantic-internal-links' )
+			esc_html__( 'Show tag filter in the editor sidebar and modals for link suggestions (requires re-indexing).', 'webgeeksmedia-ai-semantic-internal-links' )
 		);
 	}
 
@@ -845,7 +845,7 @@ class ILSEJ_Admin {
 			'<input type="number" name="%1$s[min_relevance_score]" value="%2$s" min="0" max="1" step="0.05" style="width:80px;" /> <span class="description">%3$s</span>',
 			esc_attr( ILSEJ_Core::OPTION_KEY ),
 			esc_attr( number_format( $value, 2 ) ),
-			esc_html__( 'Suggestions with a Pinecone similarity score below this value will be filtered out. Range: 0.00–1.00 (recommended: 0.55–0.70).', 'ai-semantic-internal-links' )
+			esc_html__( 'Suggestions with a Pinecone similarity score below this value will be filtered out. Range: 0.00–1.00 (recommended: 0.55–0.70).', 'webgeeksmedia-ai-semantic-internal-links' )
 		);
 	}
 
@@ -859,7 +859,7 @@ class ILSEJ_Admin {
 			'category',
 			'excluded_categories',
 			$this->get_selected_term_slugs( 'excluded_categories' ),
-			__( 'Posts in these categories will not appear as link suggestions in the editor and are filtered out of Pinecone results. Recommended for press-release / news category slugs.', 'ai-semantic-internal-links' )
+			__( 'Posts in these categories will not appear as link suggestions in the editor and are filtered out of Pinecone results. Recommended for press-release / news category slugs.', 'webgeeksmedia-ai-semantic-internal-links' )
 		);
 	}
 
@@ -873,7 +873,7 @@ class ILSEJ_Admin {
 			'post_tag',
 			'excluded_tags',
 			$this->get_selected_term_slugs( 'excluded_tags' ),
-			__( 'Posts with these tags will not appear as link suggestions in the editor and are filtered out of Pinecone results. Recommended for news / sponsored-post tag slugs.', 'ai-semantic-internal-links' )
+			__( 'Posts with these tags will not appear as link suggestions in the editor and are filtered out of Pinecone results. Recommended for news / sponsored-post tag slugs.', 'webgeeksmedia-ai-semantic-internal-links' )
 		);
 	}
 
@@ -916,7 +916,7 @@ class ILSEJ_Admin {
 		);
 
 		if ( is_wp_error( $terms ) || empty( $terms ) ) {
-			echo '<p class="description">' . esc_html__( 'No terms registered yet.', 'ai-semantic-internal-links' ) . '</p>';
+			echo '<p class="description">' . esc_html__( 'No terms registered yet.', 'webgeeksmedia-ai-semantic-internal-links' ) . '</p>';
 			return;
 		}
 
@@ -993,10 +993,10 @@ class ILSEJ_Admin {
 			'<label><input type="checkbox" name="%1$s[delete_data_on_uninstall]" value="1" %2$s /> %3$s</label>',
 			esc_attr( ILSEJ_Core::OPTION_KEY ),
 			checked( $enabled, true, false ),
-			esc_html__( 'Remove all plugin settings, transients, and cron jobs when the plugin is deleted.', 'ai-semantic-internal-links' )
+			esc_html__( 'Remove all plugin settings, transients, and cron jobs when the plugin is deleted.', 'webgeeksmedia-ai-semantic-internal-links' )
 		);
-		echo '<p class="description">' . esc_html__( 'Leave unchecked if you plan to reinstall the plugin later. Your Pinecone index is not affected.', 'ai-semantic-internal-links' ) . '</p>';
-		echo '<p id="ilsej-delete-warning" class="description" style="color: #d63638; font-weight: 600; display: none;">' . esc_html__( 'Warning: this is irreversible. All the data will be permanently deleted.', 'ai-semantic-internal-links' ) . '</p>';
+		echo '<p class="description">' . esc_html__( 'Leave unchecked if you plan to reinstall the plugin later. Your Pinecone index is not affected.', 'webgeeksmedia-ai-semantic-internal-links' ) . '</p>';
+		echo '<p id="ilsej-delete-warning" class="description" style="color: #d63638; font-weight: 600; display: none;">' . esc_html__( 'Warning: this is irreversible. All the data will be permanently deleted.', 'webgeeksmedia-ai-semantic-internal-links' ) . '</p>';
 		?>
 		<script>
 		(function() {
@@ -1017,7 +1017,7 @@ class ILSEJ_Admin {
 	 * @return void
 	 */
 	public function render_settings_page() {
-		echo '<div class="wrap"><h1>' . esc_html__( 'Internal Linking AI Settings', 'ai-semantic-internal-links' ) . '</h1>';
+		echo '<div class="wrap"><h1>' . esc_html__( 'Internal Linking AI Settings', 'webgeeksmedia-ai-semantic-internal-links' ) . '</h1>';
 		settings_errors( 'ilsej_settings_group' );
 		echo '<form method="post" action="options.php">';
 		settings_fields( 'ilsej_settings_group' );
@@ -1027,8 +1027,8 @@ class ILSEJ_Admin {
 
 		// Notes Section.
 		echo '<div style="margin-top: 40px; border-top: 1px solid #ccc; padding-top: 20px;">';
-		echo '<h2 style="margin-top: 0;">' . esc_html__( 'Troubleshooting & Optimization', 'ai-semantic-internal-links' ) . '</h2>';
-		echo '<p style="font-size: 14px; line-height: 1.6;">' . esc_html__( 'If the indexing or suggestion processes time out, you may need to increase your server\'s PHP execution time limit (max_execution_time). A value of 60–90 seconds is usually sufficient for most sites.', 'ai-semantic-internal-links' ) . '</p>';
+		echo '<h2 style="margin-top: 0;">' . esc_html__( 'Troubleshooting & Optimization', 'webgeeksmedia-ai-semantic-internal-links' ) . '</h2>';
+		echo '<p style="font-size: 14px; line-height: 1.6;">' . esc_html__( 'If the indexing or suggestion processes time out, you may need to increase your server\'s PHP execution time limit (max_execution_time). A value of 60–90 seconds is usually sufficient for most sites.', 'webgeeksmedia-ai-semantic-internal-links' ) . '</p>';
 		echo '</div>';
 
 		echo '</div>';
@@ -1052,12 +1052,12 @@ class ILSEJ_Admin {
 			$missing[] = 'Google Cloud JSON Key';
 		}
 
-		echo '<div class="wrap"><h1>' . esc_html__( 'Articles Indexing', 'ai-semantic-internal-links' ) . '</h1>';
+		echo '<div class="wrap"><h1>' . esc_html__( 'Articles Indexing', 'webgeeksmedia-ai-semantic-internal-links' ) . '</h1>';
 
 		if ( ! empty( $missing ) ) {
 			echo '<div class="notice notice-warning"><p>' . sprintf(
 				/* translators: 1: list of missing credentials, 2: opening <a> tag, 3: closing </a> tag */
-				esc_html__( 'The following credentials are required for indexing: %1$s. Please configure them on the %2$sSettings%3$s page before proceeding.', 'ai-semantic-internal-links' ),
+				esc_html__( 'The following credentials are required for indexing: %1$s. Please configure them on the %2$sSettings%3$s page before proceeding.', 'webgeeksmedia-ai-semantic-internal-links' ),
 				'<strong>' . esc_html( implode( ', ', $missing ) ) . '</strong>',
 				'<a href="' . esc_url( admin_url( 'admin.php?page=ilsej-settings' ) ) . '">',
 				'</a>'
@@ -1073,12 +1073,12 @@ class ILSEJ_Admin {
 		if ( false !== $vector_count ) {
 			$all_indexed = $vector_count >= $total_posts;
 			echo '<div id="ilsej-index-status" style="margin-bottom:15px;padding:10px 15px;border-left:4px solid ' . ( $all_indexed ? '#46b450' : '#ffb900' ) . ';background:#fff;">';
-			echo '<strong>' . esc_html__( 'Index Status:', 'ai-semantic-internal-links' ) . '</strong> ';
+			echo '<strong>' . esc_html__( 'Index Status:', 'webgeeksmedia-ai-semantic-internal-links' ) . '</strong> ';
 			echo '<span id="ilsej-status-text">';
 			echo esc_html(
 				sprintf(
 					/* translators: 1: indexed count, 2: total posts count */
-					__( '%1$d of %2$d posts indexed', 'ai-semantic-internal-links' ),
+					__( '%1$d of %2$d posts indexed', 'webgeeksmedia-ai-semantic-internal-links' ),
 					$vector_count,
 					$total_posts
 				)
@@ -1086,15 +1086,15 @@ class ILSEJ_Admin {
 			echo '</span></div>';
 		}
 
-		echo '<p>' . esc_html__( 'Click the button below to synchronize your published content with the Pinecone vector database. This process runs in batches to ensure compatibility with shared hosting environments.', 'ai-semantic-internal-links' ) . '</p>';
+		echo '<p>' . esc_html__( 'Click the button below to synchronize your published content with the Pinecone vector database. This process runs in batches to ensure compatibility with shared hosting environments.', 'webgeeksmedia-ai-semantic-internal-links' ) . '</p>';
 
 		$btn_label = ( false !== $vector_count && $vector_count >= $total_posts )
-			? __( 'Re-index All', 'ai-semantic-internal-links' )
-			: __( 'Start Indexing', 'ai-semantic-internal-links' );
+			? __( 'Re-index All', 'webgeeksmedia-ai-semantic-internal-links' )
+			: __( 'Start Indexing', 'webgeeksmedia-ai-semantic-internal-links' );
 
 		echo '<button id="ilsej-start-indexing" class="button button-primary">' . esc_html( $btn_label ) . '</button> ';
-		echo '<button id="ilsej-pause-indexing" class="button" style="display:none;">' . esc_html__( 'Pause', 'ai-semantic-internal-links' ) . '</button> ';
-		echo '<button id="ilsej-stop-indexing" class="button button-secondary" style="display:none;">' . esc_html__( 'Stop', 'ai-semantic-internal-links' ) . '</button>';
+		echo '<button id="ilsej-pause-indexing" class="button" style="display:none;">' . esc_html__( 'Pause', 'webgeeksmedia-ai-semantic-internal-links' ) . '</button> ';
+		echo '<button id="ilsej-stop-indexing" class="button button-secondary" style="display:none;">' . esc_html__( 'Stop', 'webgeeksmedia-ai-semantic-internal-links' ) . '</button>';
 		echo '<div id="ilsej-progress" style="margin-top:20px;max-width:400px;display:none;">'
 			. '<div style="background:#e1e1e1;border-radius:3px;overflow:hidden;">
                 <div id="ilsej-progress-bar" style="background:#0073aa;height:20px;width:0%;"></div>
@@ -1176,7 +1176,7 @@ class ILSEJ_Admin {
 
 		// Check user has admin permissions.
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Permission denied', 'ai-semantic-internal-links' ) );
+			wp_send_json_error( __( 'Permission denied', 'webgeeksmedia-ai-semantic-internal-links' ) );
 		}
 
 		// Load indexer class and initialize queue.
@@ -1222,7 +1222,7 @@ class ILSEJ_Admin {
 		// Security checks.
 		check_ajax_referer( 'ilsej_indexing', 'nonce' );
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Permission denied', 'ai-semantic-internal-links' ) );
+			wp_send_json_error( __( 'Permission denied', 'webgeeksmedia-ai-semantic-internal-links' ) );
 		}
 
 		// Process next batch and get response data.
@@ -1249,7 +1249,7 @@ class ILSEJ_Admin {
 	public function ajax_stop_indexing() {
 		check_ajax_referer( 'ilsej_indexing', 'nonce' );
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Permission denied', 'ai-semantic-internal-links' ) );
+			wp_send_json_error( __( 'Permission denied', 'webgeeksmedia-ai-semantic-internal-links' ) );
 		}
 		require_once ILSEJ_DIR . 'includes/ilsej-indexer.php';
 		ILSEJ_Indexer::stop();
@@ -1267,7 +1267,7 @@ class ILSEJ_Admin {
 	public function ajax_index_stats() {
 		check_ajax_referer( 'ilsej_indexing', 'nonce' );
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Permission denied', 'ai-semantic-internal-links' ) );
+			wp_send_json_error( __( 'Permission denied', 'webgeeksmedia-ai-semantic-internal-links' ) );
 		}
 
 		require_once ILSEJ_DIR . 'includes/ilsej-indexer.php';

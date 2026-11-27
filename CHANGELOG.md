@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-11-27
+
+### Changed
+- Renamed to WebGeeksMedia – AI Semantic Internal Links for the WordPress.org
+  directory. The plugin slug, folder, main file and text domain are now
+  `webgeeksmedia-ai-semantic-internal-links`. Settings carry over because the
+  option names are unchanged; a site running 1.0.0 should deactivate and
+  delete the old folder after installing 1.1.0.
+
 ## [1.0.0] - 2026-11-27
 
 ### Added

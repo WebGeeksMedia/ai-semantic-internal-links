@@ -10,7 +10,7 @@ define( 'ABSPATH', '/tmp/wordpress/' );
 define( 'WPINC', 'wp-includes' );
 define( 'ILSEJ_VERSION', '2.2.0-test' );
 define( 'ILSEJ_DIR', dirname( __DIR__ ) . '/' );
-define( 'ILSEJ_URL', 'https://example.com/wp-content/plugins/ai-semantic-internal-links/' );
+define( 'ILSEJ_URL', 'https://example.com/wp-content/plugins/webgeeksmedia-ai-semantic-internal-links/' );
 
 // Load Composer autoloader (Brain\Monkey, test classes via PSR-4).
 require_once dirname( __DIR__ ) . '/vendor/autoload.php';

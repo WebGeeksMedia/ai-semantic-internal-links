@@ -1,4 +1,4 @@
-# AI Semantic Internal Links
+# WebGeeksMedia – AI Semantic Internal Links
 
 [![PHP](https://img.shields.io/badge/PHP-8.2%2B-777BB4?logo=php&logoColor=white)](https://www.php.net/)
 [![WordPress](https://img.shields.io/badge/WordPress-6.0%2B-21759B?logo=wordpress&logoColor=white)](https://wordpress.org/)
@@ -35,7 +35,7 @@ A WordPress plugin that suggests internal links by meaning. Each post becomes a 
 
 ## Installation
 
-1. Download `ai-semantic-internal-links.zip` from the latest release, or build it with `bash build.sh`.
+1. Download `webgeeksmedia-ai-semantic-internal-links.zip` from the latest release, or build it with `bash build.sh`.
 2. In WordPress, go to **Plugins > Add New > Upload Plugin** and upload the zip, then activate it.
 3. Open **Internal Linking > Settings**: enter the Pinecone API key and index host, the Google Cloud service account JSON, and your Anthropic and/or OpenAI key; choose the primary and fallback extraction provider and the post types to index.
 4. Open **Internal Linking > Articles Indexing** and index your existing content.
@@ -73,7 +73,7 @@ composer check-cs    # WordPress Coding Standards
 composer phpstan     # PHPStan level 8
 composer test        # PHPUnit
 npm run lint         # ESLint
-bash build.sh        # builds ai-semantic-internal-links.zip
+bash build.sh        # builds webgeeksmedia-ai-semantic-internal-links.zip
 ```
 
 The PHP prefix `ilsej_` / `ILSEJ_` (functions, classes, options, hooks) comes from the original plugin and stays for compatibility.

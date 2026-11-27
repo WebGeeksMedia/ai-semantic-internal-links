@@ -26,7 +26,7 @@ permissions:
   contents: read
 
 env:
-  SLUG: ai-semantic-internal-links
+  SLUG: webgeeksmedia-ai-semantic-internal-links
 
 jobs:
   gate:
@@ -78,17 +78,17 @@ jobs:
             echo "::error::$INPUT_TAG has no published release."
             exit 1
           fi
-          gh release download "$INPUT_TAG" --pattern ai-semantic-internal-links.zip --dir release-asset
+          gh release download "$INPUT_TAG" --pattern webgeeksmedia-ai-semantic-internal-links.zip --dir release-asset
 
       - name: Leak gate (release zip, tree, history)
         env:
           LEAK_GATE_TERMS: ${{ secrets.LEAK_GATE_TERMS }}
-        run: bash bin/leak-gate.sh . release-asset/ai-semantic-internal-links.zip --history
+        run: bash bin/leak-gate.sh . release-asset/webgeeksmedia-ai-semantic-internal-links.zip --history
 
       - name: Unpack
         run: |
           mkdir -p wporg-build
-          unzip -q release-asset/ai-semantic-internal-links.zip -d wporg-build
+          unzip -q release-asset/webgeeksmedia-ai-semantic-internal-links.zip -d wporg-build
 
       - name: Deploy to WordPress.org SVN
         uses: 10up/action-wordpress-plugin-deploy@54bd289b8525fd23a5c365ec369185f2966529c2 # 2.3.0
@@ -96,7 +96,7 @@ jobs:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
           SLUG: ${{ env.SLUG }}
-          BUILD_DIR: wporg-build/ai-semantic-internal-links
+          BUILD_DIR: wporg-build/webgeeksmedia-ai-semantic-internal-links
           ASSETS_DIR: .wordpress-org
 
   assets:

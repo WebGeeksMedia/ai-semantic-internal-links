@@ -1,7 +1,7 @@
 parameters:
   level: 8
   paths:
-    - ai-semantic-internal-links.php
+    - webgeeksmedia-ai-semantic-internal-links.php
     - includes
     - uninstall.php
   scanDirectories:

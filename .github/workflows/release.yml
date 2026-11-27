@@ -43,8 +43,8 @@ jobs:
       - name: Check the tag matches the plugin version
         run: |
           VER="${TAG#v}"
-          HEADER=$(sed -n 's/^[[:space:]]*\*[[:space:]]*Version:[[:space:]]*//p' ai-semantic-internal-links.php | head -1 | tr -d '\r')
-          CONST=$(sed -n "s/.*define( 'ILSEJ_VERSION', '\([^']*\)'.*/\1/p" ai-semantic-internal-links.php)
+          HEADER=$(sed -n 's/^[[:space:]]*\*[[:space:]]*Version:[[:space:]]*//p' webgeeksmedia-ai-semantic-internal-links.php | head -1 | tr -d '\r')
+          CONST=$(sed -n "s/.*define( 'ILSEJ_VERSION', '\([^']*\)'.*/\1/p" webgeeksmedia-ai-semantic-internal-links.php)
           STABLE=$(sed -n 's/^Stable tag:[[:space:]]*//p' readme.txt | head -1 | tr -d '\r')
           echo "tag=$VER header=$HEADER constant=$CONST stable=$STABLE"
           if [ "$VER" != "$HEADER" ] || [ "$VER" != "$CONST" ] || [ "$VER" != "$STABLE" ]; then
@@ -77,7 +77,7 @@ jobs:
       - name: Leak gate (tree, built zip, history)
         env:
           LEAK_GATE_TERMS: ${{ secrets.LEAK_GATE_TERMS }}
-        run: bash bin/leak-gate.sh . ai-semantic-internal-links.zip --history
+        run: bash bin/leak-gate.sh . webgeeksmedia-ai-semantic-internal-links.zip --history
 
       - name: Compose release notes from CHANGELOG.md
         run: |
@@ -107,7 +107,7 @@ jobs:
           fail_on_unmatched_files: true
           body_path: release-body.txt
           files: |
-            ai-semantic-internal-links.zip
+            webgeeksmedia-ai-semantic-internal-links.zip
             sbom-${{ github.ref_name }}.json
 
       - name: Publish the release

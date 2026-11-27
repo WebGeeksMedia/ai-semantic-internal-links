@@ -223,7 +223,7 @@ class ILSEJ_Editor {
 		// Security checks.
 		check_ajax_referer( 'ilsej_suggest', 'nonce' );
 		if ( ! current_user_can( 'edit_posts' ) ) {
-			wp_send_json_error( __( 'Permission denied', 'ai-semantic-internal-links' ) );
+			wp_send_json_error( __( 'Permission denied', 'webgeeksmedia-ai-semantic-internal-links' ) );
 		}
 
 		// Get Categories.
@@ -442,13 +442,13 @@ class ILSEJ_Editor {
 
 		check_ajax_referer( 'ilsej_suggest', 'nonce' );
 		if ( ! current_user_can( 'edit_posts' ) ) {
-			wp_send_json_error( __( 'Permission denied', 'ai-semantic-internal-links' ) );
+			wp_send_json_error( __( 'Permission denied', 'webgeeksmedia-ai-semantic-internal-links' ) );
 		}
 
 		$content = isset( $_POST['content'] ) ? wp_kses_post( wp_unslash( $_POST['content'] ) ) : '';
 		$mode    = isset( $_POST['mode'] ) ? sanitize_text_field( wp_unslash( $_POST['mode'] ) ) : 'bulk';
 		if ( empty( $content ) ) {
-			wp_send_json_error( __( 'No content provided', 'ai-semantic-internal-links' ) );
+			wp_send_json_error( __( 'No content provided', 'webgeeksmedia-ai-semantic-internal-links' ) );
 		}
 		$content = do_blocks( $content );
 		require_once ILSEJ_DIR . 'includes/functions-internal-links.php';

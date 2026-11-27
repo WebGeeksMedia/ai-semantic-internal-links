@@ -90,7 +90,7 @@ class ILSEJ_Indexer {
 	 * - save_post: Catches updates to already-published posts (backup)
 	 * - Some WordPress setups don't fire transition_post_status on updates
 	 *
-	 * CALLED FROM: Main plugin file (ai-semantic-internal-links.php) on 'plugins_loaded' hook
+	 * CALLED FROM: Main plugin file (webgeeksmedia-ai-semantic-internal-links.php) on 'plugins_loaded' hook
 	 *
 	 * @return void
 	 */

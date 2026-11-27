@@ -1,10 +1,10 @@
-=== AI Semantic Internal Links ===
+=== WebGeeksMedia – AI Semantic Internal Links ===
 Contributors: namaserajesh
 Tags: internal linking, semantic search, related posts, vector search, ai
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -100,7 +100,7 @@ When a fallback provider is set and the primary fails (no key, an error, a timeo
 
 == Installation ==
 
-1. Upload the `ai-semantic-internal-links` folder to `/wp-content/plugins/`, or install the zip through **Plugins > Add New > Upload Plugin**.
+1. Upload the `webgeeksmedia-ai-semantic-internal-links` folder to `/wp-content/plugins/`, or install the zip through **Plugins > Add New > Upload Plugin**.
 2. Activate the plugin through the **Plugins** screen.
 3. Go to **Internal Linking > Settings**.
 4. Enter your Pinecone API key and index host URL.
@@ -154,6 +154,14 @@ Yes. The filters `ilsej_generic_anchor_blocklist`, `ilsej_anchor_stop_words` and
 Only if you turn on "Delete data on uninstall" in Settings (off by default). Vectors in Pinecone are never deleted by the plugin; remove them from the Pinecone console.
 
 == Changelog ==
+
+= 1.1.0 =
+
+* Renamed to WebGeeksMedia – AI Semantic Internal Links for the WordPress.org
+  directory. The plugin slug, folder, main file and text domain are now
+  `webgeeksmedia-ai-semantic-internal-links`. Settings carry over because the
+  option names are unchanged; a site running 1.0.0 should deactivate and
+  delete the old folder after installing 1.1.0.
 
 = 1.0.0 =
 

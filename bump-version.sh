@@ -22,25 +22,25 @@ fi
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ERRORS=0
 
-# --- 1. Plugin header Version: in ai-semantic-internal-links.php ---
-FILE="$SCRIPT_DIR/ai-semantic-internal-links.php"
+# --- 1. Plugin header Version: in webgeeksmedia-ai-semantic-internal-links.php ---
+FILE="$SCRIPT_DIR/webgeeksmedia-ai-semantic-internal-links.php"
 OLD=$(sed -n 's/^[[:space:]]*\*[[:space:]]*Version:[[:space:]]*\([0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\).*/\1/p' "$FILE")
 if [[ -z "$OLD" ]]; then
   echo "Error: Could not find 'Version:' in plugin header of $FILE" >&2
   ERRORS=$((ERRORS + 1))
 else
   sed -i.bak "s/^\( \* Version: *\)[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*/\1$NEW_VERSION/" "$FILE"
-  echo "ai-semantic-internal-links.php  Version header:   $OLD → $NEW_VERSION"
+  echo "webgeeksmedia-ai-semantic-internal-links.php  Version header:   $OLD → $NEW_VERSION"
 fi
 
-# --- 2. ILSEJ_VERSION constant in ai-semantic-internal-links.php ---
+# --- 2. ILSEJ_VERSION constant in webgeeksmedia-ai-semantic-internal-links.php ---
 OLD_CONST=$(sed -n "s/.*define( 'ILSEJ_VERSION', '\([0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\)'.*/\1/p" "$FILE")
 if [[ -z "$OLD_CONST" ]]; then
   echo "Error: Could not find ILSEJ_VERSION constant in $FILE" >&2
   ERRORS=$((ERRORS + 1))
 else
   sed -i.bak "s/define( 'ILSEJ_VERSION', '[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*'/define( 'ILSEJ_VERSION', '$NEW_VERSION'/" "$FILE"
-  echo "ai-semantic-internal-links.php  VERSION constant:  $OLD_CONST → $NEW_VERSION"
+  echo "webgeeksmedia-ai-semantic-internal-links.php  VERSION constant:  $OLD_CONST → $NEW_VERSION"
 fi
 
 # --- 3. Stable tag in readme.txt ---

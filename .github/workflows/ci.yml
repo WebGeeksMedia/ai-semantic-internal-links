@@ -96,13 +96,13 @@ jobs:
         run: |
           bash build.sh
           mkdir -p dist
-          unzip -q ai-semantic-internal-links.zip -d dist
+          unzip -q webgeeksmedia-ai-semantic-internal-links.zip -d dist
 
       # Blocking on purpose: a Plugin Check error fails the build.
       - name: Run Plugin Check
         uses: wordpress/plugin-check-action@10857da14b6c2246d15402b3e69f777edcf8c12e # v1.1.9
         with:
-          build-dir: './dist/ai-semantic-internal-links'
+          build-dir: './dist/webgeeksmedia-ai-semantic-internal-links'
           include-experimental: 'false'
 
   leak-gate:
@@ -143,7 +143,7 @@ jobs:
            github.event.pull_request.head.repo.full_name == github.repository)
         env:
           LEAK_GATE_TERMS: ${{ secrets.LEAK_GATE_TERMS }}
-        run: bash bin/leak-gate.sh . ai-semantic-internal-links.zip --history
+        run: bash bin/leak-gate.sh . webgeeksmedia-ai-semantic-internal-links.zip --history
 
       - name: Term scan skipped
         if: >-
