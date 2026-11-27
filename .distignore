@@ -1,0 +1,34 @@
+# Files that never ship in the WordPress.org release. The release workflow
+# deploys the output of build.sh (a whitelist); this list is the fallback for
+# tools that rsync the repository instead.
+/.git
+/.github
+/.wordpress-org
+/bin
+/build
+/node_modules
+/tests
+/vendor
+.distignore
+.gitattributes
+.gitignore
+.DS_Store
+composer.json
+composer.lock
+package.json
+package-lock.json
+eslint.config.mjs
+phpcs.xml
+phpstan.neon.dist
+phpunit.xml.dist
+build.sh
+bump-version.sh
+sync-changelog.sh
+README.md
+CHANGELOG.md
+CONTRIBUTING.md
+CODE_OF_CONDUCT.md
+SECURITY.md
+SUPPORT.md
+*.zip
+sbom-*.json

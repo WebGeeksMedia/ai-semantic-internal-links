@@ -1,0 +1,25 @@
+name: Plugin page preview
+
+# Comments a preview of the WordPress.org plugin page on pull requests that
+# change readme.txt or the .wordpress-org assets.
+#
+# pull_request_target runs with this repository's token so it can comment on
+# pull requests from forks. It never checks out or runs pull request code.
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'readme.txt'
+      - '.wordpress-org/**'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Plugin page preview
+        uses: jdevalk/plugin-page-preview@2200faaecd4ec148bd4e861a68bd8f3ab0619bac # v1

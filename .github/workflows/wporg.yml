@@ -1,0 +1,126 @@
+name: WordPress.org
+
+# Two jobs, both inert until the SVN_USERNAME and SVN_PASSWORD repository
+# secrets exist (they are created after WordPress.org approves the plugin):
+#
+# - deploy: run by hand (Actions > WordPress.org > Run workflow) with a release
+#   tag. Takes the zip of that published release, runs the leak gate, and
+#   commits it to SVN trunk and tags/.
+# - assets: on a push to main that changes readme.txt or .wordpress-org/,
+#   runs the leak gate, then updates the readme and the banner, icon and
+#   screenshot assets only.
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to deploy (for example v1.0.0)'
+        required: true
+  push:
+    branches: [main]
+    paths:
+      - 'readme.txt'
+      - '.wordpress-org/**'
+
+permissions:
+  contents: read
+
+env:
+  SLUG: ai-semantic-internal-links
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      ready: ${{ steps.check.outputs.ready }}
+    steps:
+      - id: check
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+        run: |
+          if [ -n "$SVN_USERNAME" ] && [ -n "$SVN_PASSWORD" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::SVN_USERNAME / SVN_PASSWORD are not set; nothing is sent to WordPress.org."
+          fi
+
+  deploy:
+    needs: gate
+    if: needs.gate.outputs.ready == 'true' && github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate tag input
+        env:
+          INPUT_TAG: ${{ inputs.tag }}
+        run: |
+          if ! printf '%s' "$INPUT_TAG" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "::error::Tag must look like v1.2.3"
+            exit 1
+          fi
+
+      - name: Checkout the tag
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v6
+        with:
+          ref: refs/tags/${{ inputs.tag }}
+          fetch-depth: 0
+
+      # Deploy only the zip of a published release: the release workflow ran
+      # the leak gate on it, and a published release is immutable.
+      - name: Download the published release zip
+        env:
+          GH_TOKEN: ${{ github.token }}
+          INPUT_TAG: ${{ inputs.tag }}
+        run: |
+          DRAFT=$(gh release view "$INPUT_TAG" --json isDraft --jq .isDraft)
+          if [ "$DRAFT" != "false" ]; then
+            echo "::error::$INPUT_TAG has no published release."
+            exit 1
+          fi
+          gh release download "$INPUT_TAG" --pattern ai-semantic-internal-links.zip --dir release-asset
+
+      - name: Leak gate (release zip, tree, history)
+        env:
+          LEAK_GATE_TERMS: ${{ secrets.LEAK_GATE_TERMS }}
+        run: bash bin/leak-gate.sh . release-asset/ai-semantic-internal-links.zip --history
+
+      - name: Unpack
+        run: |
+          mkdir -p wporg-build
+          unzip -q release-asset/ai-semantic-internal-links.zip -d wporg-build
+
+      - name: Deploy to WordPress.org SVN
+        uses: 10up/action-wordpress-plugin-deploy@54bd289b8525fd23a5c365ec369185f2966529c2 # 2.3.0
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SLUG: ${{ env.SLUG }}
+          BUILD_DIR: wporg-build/ai-semantic-internal-links
+          ASSETS_DIR: .wordpress-org
+
+  assets:
+    needs: gate
+    if: needs.gate.outputs.ready == 'true' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (full history)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v6
+        with:
+          fetch-depth: 0
+
+      # SVN history is public and permanent, so the term scan runs first.
+      - name: Leak gate (tree, history)
+        env:
+          LEAK_GATE_TERMS: ${{ secrets.LEAK_GATE_TERMS }}
+        run: bash bin/leak-gate.sh . --history
+
+      - name: Update readme and assets on WordPress.org
+        uses: 10up/action-wordpress-plugin-asset-update@2480306f6f693672726d08b5917ea114cb2825f7 # 2.2.0
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SLUG: ${{ env.SLUG }}
+          ASSETS_DIR: .wordpress-org
+          README_NAME: readme.txt
+          IGNORE_OTHER_FILES: true

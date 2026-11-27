@@ -1,0 +1,116 @@
+name: Release (zip + SBOM)
+
+# Works with GitHub immutable releases: build on tag push, create the release as
+# a draft, attach the zip and SBOM, then publish. Assets and tag lock at publish.
+#
+#   git tag v1.0.1 && git push origin v1.0.1
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ github.ref_name }}
+    steps:
+      - name: Checkout (full history)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v6
+        with:
+          fetch-depth: 0
+
+      - name: Check the tagged commit is on main and passed CI
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git fetch origin main
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
+            echo "::error::$TAG points at a commit that is not on main."
+            exit 1
+          fi
+          CONCLUSION=$(gh run list --workflow ci.yml --commit "$GITHUB_SHA" --event push --limit 1 --json conclusion --jq '.[0].conclusion // ""')
+          if [ "$CONCLUSION" != "success" ]; then
+            echo "::error::CI on $GITHUB_SHA is '${CONCLUSION:-missing}', not success. Wait for CI on main, then push the tag."
+            exit 1
+          fi
+
+      - name: Check the tag matches the plugin version
+        run: |
+          VER="${TAG#v}"
+          HEADER=$(sed -n 's/^[[:space:]]*\*[[:space:]]*Version:[[:space:]]*//p' ai-semantic-internal-links.php | head -1 | tr -d '\r')
+          CONST=$(sed -n "s/.*define( 'ILSEJ_VERSION', '\([^']*\)'.*/\1/p" ai-semantic-internal-links.php)
+          STABLE=$(sed -n 's/^Stable tag:[[:space:]]*//p' readme.txt | head -1 | tr -d '\r')
+          echo "tag=$VER header=$HEADER constant=$CONST stable=$STABLE"
+          if [ "$VER" != "$HEADER" ] || [ "$VER" != "$CONST" ] || [ "$VER" != "$STABLE" ]; then
+            echo "::error::Tag $TAG does not match Version ($HEADER), ILSEJ_VERSION ($CONST) and Stable tag ($STABLE)."
+            exit 1
+          fi
+          if ! grep -q "^## \[$VER\]" CHANGELOG.md; then
+            echo "::error::CHANGELOG.md has no ## [$VER] entry."
+            exit 1
+          fi
+
+      - name: Install Syft (pinned, checksum-verified)
+        env:
+          SYFT_VERSION: v1.22.0
+          SYFT_SHA256: 90ac44b173bd5db36142b351c2e83f89ecdee403285513d4586303dbf8b6bea1
+        run: |
+          curl -sSfL "https://github.com/anchore/syft/releases/download/${SYFT_VERSION}/syft_${SYFT_VERSION#v}_linux_amd64.tar.gz" -o syft.tar.gz
+          echo "${SYFT_SHA256}  syft.tar.gz" | sha256sum -c
+          tar -xzf syft.tar.gz syft
+          sudo mv syft /usr/local/bin/syft
+          rm syft.tar.gz
+
+      - name: Generate SBOM
+        run: syft dir:. -o "cyclonedx-json=sbom-${TAG}.json"
+
+      - name: Build plugin
+        run: bash build.sh
+
+      # Fails closed when the LEAK_GATE_TERMS secret is missing.
+      - name: Leak gate (tree, built zip, history)
+        env:
+          LEAK_GATE_TERMS: ${{ secrets.LEAK_GATE_TERMS }}
+        run: bash bin/leak-gate.sh . ai-semantic-internal-links.zip --history
+
+      - name: Compose release notes from CHANGELOG.md
+        run: |
+          VER="${TAG#v}"
+          WP_MIN=$(sed -n 's/^Requires at least:[[:space:]]*//p' readme.txt | head -1 | tr -d '\r')
+          PHP_MIN=$(sed -n 's/^Requires PHP:[[:space:]]*//p' readme.txt | head -1 | tr -d '\r')
+          {
+            echo "## ${TAG}"
+            echo "**Compatibility:** WordPress ${WP_MIN}+, PHP ${PHP_MIN}+"
+            echo
+            awk -v v="$VER" '
+              $0 ~ ("^## \\[" v "\\]") { flag=1; next }
+              /^## \[/ && flag { exit }
+              flag { print }
+            ' CHANGELOG.md
+            echo
+            echo "SBOM: CycloneDX JSON, generated with Syft."
+          } > release-body.txt
+          cat release-body.txt
+
+      - name: Create draft release with assets
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          draft: true
+          fail_on_unmatched_files: true
+          body_path: release-body.txt
+          files: |
+            ai-semantic-internal-links.zip
+            sbom-${{ github.ref_name }}.json
+
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release edit "$TAG" --draft=false --latest

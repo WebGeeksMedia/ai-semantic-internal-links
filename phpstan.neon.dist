@@ -1,0 +1,13 @@
+parameters:
+  level: 8
+  paths:
+    - ai-semantic-internal-links.php
+    - includes
+    - uninstall.php
+  scanDirectories:
+    - .
+  ignoreErrors:
+    # Constants are defined in main plugin file which is scanned
+    -
+      message: '#Constant ILSEJ_(VERSION|DIR|URL) not found#'
+      reportUnmatched: false

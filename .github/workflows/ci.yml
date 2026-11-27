@@ -1,0 +1,153 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # Weekly run so a newly published advisory against the lock files is noticed.
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  php:
+    name: PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.2', '8.3', '8.4']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v6
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          tools: composer:v2
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Composer packages
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v5
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-php${{ matrix.php }}-composer-${{ hashFiles('composer.lock') }}
+          restore-keys: ${{ runner.os }}-php${{ matrix.php }}-composer-
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: PHP lint
+        run: composer lint
+
+      - name: PHPUnit
+        run: composer test
+
+      # The checks below do not depend on the PHP version, so they run once.
+      - name: PHPCS (WordPress Coding Standards)
+        if: matrix.php == '8.4'
+        run: composer check-cs
+
+      - name: PHPStan (level 8)
+        if: matrix.php == '8.4'
+        run: composer phpstan
+
+      - name: Composer audit
+        if: matrix.php == '8.4'
+        run: composer audit --no-interaction
+
+      - name: Setup Node
+        if: matrix.php == '8.4'
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: ESLint
+        if: matrix.php == '8.4'
+        run: |
+          npm ci --no-audit --no-fund
+          npm run lint
+
+      - name: npm audit
+        if: matrix.php == '8.4'
+        run: npm audit --audit-level=high
+
+  plugin-check:
+    name: WordPress.org Plugin Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v6
+
+      - name: Build plugin
+        run: |
+          bash build.sh
+          mkdir -p dist
+          unzip -q ai-semantic-internal-links.zip -d dist
+
+      # Blocking on purpose: a Plugin Check error fails the build.
+      - name: Run Plugin Check
+        uses: wordpress/plugin-check-action@10857da14b6c2246d15402b3e69f777edcf8c12e # v1.1.9
+        with:
+          build-dir: './dist/ai-semantic-internal-links'
+          include-experimental: 'false'
+
+  leak-gate:
+    name: Leak gate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (full history)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v6
+        with:
+          fetch-depth: 0
+
+      - name: Install gitleaks
+        env:
+          GITLEAKS_VERSION: '8.24.0'
+        run: |
+          base="https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}"
+          curl -sSfL "${base}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" -o gitleaks.tar.gz
+          curl -sSfL "${base}/gitleaks_${GITLEAKS_VERSION}_checksums.txt" -o gitleaks_checksums.txt
+          grep " gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz\$" gitleaks_checksums.txt | sed 's/ .*\.tar\.gz$/  gitleaks.tar.gz/' | sha256sum -c -
+          tar -xzf gitleaks.tar.gz gitleaks
+          sudo mv gitleaks /usr/local/bin/gitleaks
+          rm -f gitleaks.tar.gz gitleaks_checksums.txt
+
+      - name: gitleaks (full history)
+        run: gitleaks git --redact --no-banner --exit-code 1 .
+
+      - name: Build plugin
+        run: bash build.sh
+
+      # The term list lives in the LEAK_GATE_TERMS repository secret, never in
+      # the repository. Pull requests from forks and from Dependabot get no
+      # secrets, so the term scan runs on every push to main and on every
+      # release instead.
+      - name: Term scan (tree, built zip, history)
+        if: >-
+          github.actor != 'dependabot[bot]' &&
+          (github.event_name != 'pull_request' ||
+           github.event.pull_request.head.repo.full_name == github.repository)
+        env:
+          LEAK_GATE_TERMS: ${{ secrets.LEAK_GATE_TERMS }}
+        run: bash bin/leak-gate.sh . ai-semantic-internal-links.zip --history
+
+      - name: Term scan skipped
+        if: >-
+          github.actor == 'dependabot[bot]' ||
+          (github.event_name == 'pull_request' &&
+           github.event.pull_request.head.repo.full_name != github.repository)
+        run: echo "::notice::Term scan skipped (no secrets for this pull request). It runs on the push to main after merge."

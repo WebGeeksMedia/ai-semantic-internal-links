@@ -1,0 +1,45 @@
+name: Composer Diff
+on:
+  pull_request:
+    paths:
+      - 'composer.lock'
+
+
+# Cancels superseded runs on the same branch instead of paying for both.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  composer-diff:
+    name: Composer Diff
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v6
+        with:
+          fetch-depth: 0 # Required to make it possible to compare with PR base branch
+
+      - name: Generate composer diff
+        id: composer_diff
+        uses: IonBazan/composer-diff-action@e2022e8718d05cc6e4e5990a06fc928c75837f76 # v2.0.0
+        with:
+          base: ${{ github.event.pull_request.base.sha }}
+
+      - uses: marocchino/sticky-pull-request-comment@5770ad5eb8f42dd2c4f34da00c94c5381e49af88 # v3.0.5
+        # An empty diff result will break this action.
+        # Fork pull requests get a read-only token, so they get no comment.
+        if: ${{ steps.composer_diff.outputs.composer_diff_exit_code != 0 && github.event.pull_request.head.repo.full_name == github.repository }}
+        with:
+          header: composer-diff # Creates a collapsed comment with the report
+          message: |
+            <details>
+            <summary>Composer package changes</summary>
+
+            ${{ steps.composer_diff.outputs.composer_diff }}
+
+            </details>

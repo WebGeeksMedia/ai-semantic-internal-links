@@ -1,0 +1,61 @@
+/**
+ * ADMIN SETTINGS MASKING STYLES
+ */
+
+.ilsej-mask-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    max-width: 500px;
+}
+
+.ilsej-mask-wrapper input[type="text"],
+.ilsej-mask-wrapper input[type="password"] {
+    padding-right: 35px;
+    width: 100%;
+}
+
+.ilsej-mask-wrapper textarea {
+    transition: filter 0.3s ease;
+    width: 100%;
+}
+
+.ilsej-mask-wrapper textarea.ilsej-blur {
+    filter: blur(5px);
+    user-select: none;
+    pointer-events: none;
+}
+
+.ilsej-mask-wrapper textarea.ilsej-blur:focus {
+    filter: none;
+}
+
+.ilsej-toggle-mask {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #777;
+    padding: 0;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.ilsej-toggle-mask:hover {
+    color: #2271b1;
+}
+
+.ilsej-mask-wrapper textarea + .ilsej-toggle-mask {
+    top: 20px;
+}
+
+/* Adjustments for indexing page progress bar if needed */
+#ilsej-progress {
+    margin-top: 20px;
+}

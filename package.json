@@ -1,0 +1,18 @@
+{
+	"name": "ai-semantic-internal-links",
+	"version": "1.0.0",
+	"description": "AI Semantic Internal Links WordPress plugin",
+	"private": true,
+	"engines": {
+		"node": ">=20.19.0"
+	},
+	"scripts": {
+		"lint": "eslint assets/js/**/*.js",
+		"lint:fix": "eslint assets/js/**/*.js --fix"
+	},
+	"devDependencies": {
+		"@eslint/js": "^10.0.0",
+		"eslint": "^10.13.0",
+		"globals": "^17.13.0"
+	}
+}

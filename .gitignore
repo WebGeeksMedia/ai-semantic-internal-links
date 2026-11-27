@@ -1,0 +1,32 @@
+# Composer
+vendor/
+
+# Node
+node_modules/
+npm-debug.log
+
+# Build output
+build/
+dist/
+*.zip
+sbom-*.json
+
+# IDE
+.idea/
+.vscode/
+*.code-workspace
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+._*
+Thumbs.db
+*.log
+
+# Local environment files and tool caches
+.[e]nv
+.[e]nv.*
+.phpunit.result.cache
+.php-cs-fixer.cache
