@@ -10,7 +10,9 @@
 # With no terms the gate fails closed.
 #
 # A few generic patterns need no list and are always checked: real Pinecone
-# index hosts and commit-message trailers that carry tool session metadata.
+# index hosts and commit-message trailers that carry tool session metadata
+# (Claude session links and Claude co-author lines; bot co-author lines such
+# as Dependabot's squash-merge trailer are fine).
 #
 # Output names the file and line only, never the matching text, so CI logs do
 # not repeat what the gate found.
@@ -48,7 +50,7 @@ PATTERNS="$WORK/patterns.txt"
 cat > "$PATTERNS" <<'EOF'
 [a-z0-9-]+\.svc\.[a-z0-9-]+\.pinecone\.io
 ^[[:space:]]*Claude-Sess[i]on:
-^[[:space:]]*Co-Authored-B[y]:
+^[[:space:]]*Co-Authored-B[y]:.*(claude|anthropic)
 EOF
 
 HITS=0
